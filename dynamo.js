@@ -10,6 +10,7 @@
             if (v.data('initialized') == 'true')
                 return;
             
+            var transitionOut = options.transitionOut;
             var delay = options.delay || parseInt(v.data('delay')) || 3000;
             var speed = options.speed || parseInt(v.data('speed')) || 350;
             var pause = options.pause || v.data('pause') || false;
@@ -65,7 +66,7 @@
 
             // now, animate it
             var transition = function() {
-                v.dynamo_trigger({ speed: speed, callback: callback });
+                v.dynamo_trigger({ transitionOut: transitionOut, speed: speed, callback: callback });
             };
 
             if (!pause) {
@@ -79,16 +80,32 @@
         return this.each(function(i, v) {
             options = options || {}
 
+            var transitionOut = options.transitionOut || $(v).data('transition-out')
             var speed = options.speed || $(v).data('speed') || 350;
             var callback = options.callback || $(v).data('callback') || function() {};
-            $(v).find('div:first').slideUp(speed, function() {
+
+            var onDone = function() {
                 $(v).append($(this).show());
 
                 // check if the first item has made its way to the top again
                 // console.log($(v).find('div:first').data('trigger'));
                 if ($(v).find('div:first').data('trigger') == 'true')
                     eval(callback).call();
-            });
+            }
+
+            var el = $(v).find('div:first');
+
+            if (typeof(transitionOut) != 'undefined' && transitionOut != null)
+            {
+                // Animate out with a CSS3 transition
+                el.addClass(transitionOut)
+                el.on('transitionend webkitTransitionEnd oTransitionEnd msTransitionEnd', onDone) // FIXME
+            }
+            else
+            {
+                // Slide out with JQuery as a fallback
+                el.slideUp(speed, onDone);
+            }
         });
     };
 

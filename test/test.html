@@ -19,6 +19,7 @@
       font-size: 200%;
     }
   </style>
+  <link type="text/css" rel="stylesheet" href="./animate.css" />
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 </head>
 <body>
@@ -30,6 +31,8 @@
   <p>Feel free to change this document and add any test cases you feel are appropriate.</p>
   
   <p>This is <span id="pause_example" class="dynamo" data-pause="true" data-lines="not paused.">paused.</span></p>
+
+  <p>You can animate using custom CSS3 transitions, <span id="animate_example" class="dynamo">too.</span></p>
 
   <p>Here is a timer to showcase callback functionality.</p>
 
@@ -58,6 +61,14 @@
     $('#pause_example').click(function() {
       $(this).dynamo_trigger();
     });
+
+    // Animated with CSS3 transition
+    $('#animate_example').dynamo({
+      speed: 100,
+      delay: 1250,
+      lines: ["if you want.", "if you roll that way.", "like a boss."],
+      transitionOut: 'animated fadeOutUp' // Defined in animate.css
+    })
 
     // timer example
     bump = function(id) {
