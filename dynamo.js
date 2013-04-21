@@ -98,8 +98,11 @@
             if (typeof(transitionOut) != 'undefined' && transitionOut != null)
             {
                 // Animate out with a CSS3 transition
-                el.addClass(transitionOut)
-                el.on('transitionend webkitTransitionEnd oTransitionEnd msTransitionEnd', onDone) // FIXME
+                el.one('animationend animationend webkitAnimationEnd oanimationend MSAnimationEnd', function() {
+                    el.removeClass(transitionOut);
+                })
+                el.one('animationend animationend webkitAnimationEnd oanimationend MSAnimationEnd', onDone)
+                el.addClass(transitionOut);
             }
             else
             {
